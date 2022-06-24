@@ -40,27 +40,22 @@ images = np.array([cv2.resize(imageio.imread(path), (IMG_ROWS, IMG_COLS))
 bnorm1 = BatchNormalization()(images)
 prediction = model.predict(bnorm1)
         
-print(np.squeeze(prediction))
 img = Image.fromarray(np.squeeze(prediction))
 
 img = cv2.imread(imgSrc)
 img = cv2.resize(img, (IMG_ROWS, IMG_COLS))
 
+cv2.imwrite('image.png', img)
+
 mask = np.squeeze(prediction)
+mask = cv2.normalize(mask, None, 0, 255, cv2.NORM_MINMAX, cv2.CV_8U)
 
-img[mask] = 0
+img[mask < 20] = 0
+masked = img
+#masked = cv2.bitwise_or(img, img, mask = mask)
 
-print(img)
-
-mask = cv2.imwrite('teste5.png', img)
-mask = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
-
-
-
-#cv2.fillPoly(mask, img, 255)
-
-cv2.imwrite('mask1.png', mask)
-cv2.imwrite('mask2.png', img)
+cv2.imwrite('mask.png', mask)
+cv2.imwrite('masked.png', masked)
 
 #es = cv2.bitwise_and(img, img, mask = mask)
 

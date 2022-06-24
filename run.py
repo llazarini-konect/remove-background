@@ -16,14 +16,10 @@ from keras.layers import BatchNormalization
 from keras.layers import concatenate
 from keras.models import Model
 
+IMG_ROWS = 960
+IMG_COLS = 640
 
-IMG_ROWS = 480
-IMG_COLS = 320
-
-TEST_IMG_ROWS = 1918
-TEST_IMG_COLS = 1280
-
-SAMPLE = 1000
+SAMPLE = 5000
 
 SMOOTH = 1.
 
@@ -43,13 +39,6 @@ train_masks = train_masks.astype(np.float32)
 train_masks[train_masks<=127] = 0.
 train_masks[train_masks>127] = 1.
 train_masks = np.reshape(train_masks, (*train_masks.shape, 1))
-
-# Plot the image
-fig = plt.figure(0, figsize=(20, 20))
-fig.add_subplot(1, 2, 1)
-plt.imshow(train_imgs[0])
-fig.add_subplot(1, 2, 2)
-plt.imshow(np.squeeze(train_masks[0]), cmap='gray')
 
 # Train the convolutional network
 inputs = Input((IMG_COLS, IMG_ROWS, 3))
@@ -117,4 +106,4 @@ model.fit(train_imgs[50:], train_masks[50:],
           batch_size=12, epochs=10, 
           validation_data=(train_imgs[:50], train_masks[:50]))
 
-model.save('model.keras')
+model.save('model2.h5')
